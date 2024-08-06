@@ -27,14 +27,14 @@ def get_weather(location) -> str:
         response.raise_for_status()  # Raise an exception if the request fails
         weather_data = response.json()
 
-        today_weather = weather_data['days'][0]
+        today_weather = weather_data['days'][0]    
 
         fun_response = (
             f"Here's the weather for {weather_data['resolvedAddress']} today:\n\n"
             f"{today_weather['description']}\n"
             f"Current temperature: {today_weather['temp']}°C (feels like {today_weather['feelslike']}°C)\n"
             f"High: {today_weather['tempmax']}°C, Low: {today_weather['tempmin']}°C\n"
-            f"Precipitation probability: {today_weather['precipprob']}% ({', '.join(today_weather['preciptype'])})\n"
+            f"Precipitation probability: {today_weather['precipprob']}% \n"
             f"Humidity: {today_weather['humidity']}%\n"
             f"Wind speed: {today_weather['windspeed']} km/h (gusts up to {today_weather['windgust']} km/h)\n"
             f"Cloud cover: {today_weather['cloudcover']}%\n"
