@@ -1,16 +1,16 @@
 import requests
 import json
-from tool_decorator_tools import get_current_weather
+from weather_tool import get_weather
 
 # Collect tool definitions from decorated functions
-tools = [get_current_weather.tool_definition]
+tools = [get_weather.tool_definition]
 
 # Define the request payload
 payload = {
     "model": "llama3.1:8b-instruct-q8_0", #mistral-nemo:12b-instruct-2407-q8_0
     "messages": [
         {"role": "system", "content": "You are a smart AI assistant. You are a master at understanding what a customer wants and utilize available tools only if you have to."},
-        {"role": "user", "content": "What is the weather in Woodbury MN?"}
+        {"role": "user", "content": "Is it hotter in new delhi or in minneapolis??"}
     ],
     "tools": tools
 }
@@ -32,9 +32,9 @@ if response.status_code == 200:
     response_data = response.json()
     tool_calls = response_data.get('choices', [{}])[0].get('message', {}).get('tool_calls', [])
     for call in tool_calls:
-        if call['type'] == 'function' and call['function']['name'] == 'get_current_weather':
+        if call['type'] == 'function' and call['function']['name'] == 'get_weather':
             location = json.loads(call['function']['arguments'])['location']
-            weather = get_current_weather(location)
+            weather = get_weather(location)
             print(f"Weather in {location}: {weather}")
 else:
     print(f"Error: {response.status_code}, {response.text}")
