@@ -12,7 +12,7 @@ UNIT_GROUP = 'us'
 BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
 
 @custom_tool
-def get_weather(location) -> str:
+def get_weather(location: str) -> str:
     """Get the current weather in a specified location.    
     Args:
         location (str): The name of the location for which to check the weather in City, State format. 

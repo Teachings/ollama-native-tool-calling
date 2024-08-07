@@ -1,6 +1,7 @@
 import requests
 import json
 from weather_tool import get_weather
+from termcolor import colored
 
 # Define the OpenAI endpoint and API key
 api_url = "http://ai.mtcl.lan:11434/v1/chat/completions"
@@ -19,12 +20,12 @@ tools = [get_weather.tool_definition]
 tool_functions = {
     "get_weather": get_weather
 }
+
 SYSTEM_MESSAGE_CONTENT = "You are a smart AI assistant. \
     You are a master at understanding what a user wants and utilize available tools only if you have to.  \
     If you utilize a tool call's answer in your final reply \
         you always let user know that you used a tool call response and did not make up the answer by yourself.\
-    If you used more than one tool cal responses for your final answer, then highlight that too."
-
+    If you used more than one tool call responses for your final answer, then highlight that too."
 
 USER_MESSAGE_CONTENT = "Is it hotter in New Delhi or in Minneapolis? How hot is it? I want to plan a visit to the cooler place."
 
@@ -38,7 +39,6 @@ messages = [
         "role": "user", 
         "content": USER_MESSAGE_CONTENT
     }
-
 ]
 
 # Define the request payload
@@ -48,10 +48,19 @@ payload = {
     "tools": tools
 }
 
+# Print the initial request payload
+print(colored("Initial Request Payload:", "cyan"))
+print(colored(json.dumps(payload, indent=2), "yellow"))
+
 response = requests.post(api_url, headers=headers, data=json.dumps(payload))
 
 if response.status_code == 200:
     response_data = response.json()
+    
+    # Print the initial response
+    print(colored("Initial Response:", "cyan"))
+    print(colored(json.dumps(response_data, indent=2), "green"))
+    
     tool_calls = response_data.get('choices', [{}])[0].get('message', {}).get('tool_calls', [])
 
     # Initialize an empty array (list) to store tool messages
@@ -66,7 +75,7 @@ if response.status_code == 200:
         if tool_function:
             arguments = json.loads(call['function']['arguments'])
             result = tool_function(**arguments)
-            # print(f"Result from {function_name}: {result}")
+            print(colored(f"Result from {function_name}: {result}", "magenta"))
 
             # Construct the tool message using the tool's function details
             tool_message = {
@@ -77,10 +86,10 @@ if response.status_code == 200:
             # Append the constructed tool message to the array (list)
             tool_messages.append(tool_message)
         else:
-            print(f"No tool function found for {function_name}")
+            print(colored(f"No tool function found for {function_name}", "red"))
 
 else:
-    print(f"Error: {response.status_code}, {response.text}")
+    print(colored(f"Error: {response.status_code}, {response.text}", "red"))
 
 # Extend messages with tool responses only if there were successful tool calls
 if tool_messages:
@@ -93,12 +102,19 @@ payload = {
     "tools": tools
 }
 
+# Print the final request payload
+print(colored("Final Request Payload:", "cyan"))
+print(colored(json.dumps(payload, indent=2), "yellow"))
+
 # Make the final request to the OpenAI API
 final_response = requests.post(api_url, headers=headers, data=json.dumps(payload))
 
 if final_response.status_code == 200:
     final_response_data = final_response.json()
+    
+    # Print the final response
+    print(colored("Final Response:", "cyan"))
     final_content = final_response_data.get('choices', [{}])[0].get('message', {}).get('content', '')
-    print(final_content)
+    print(colored(final_content, "green"))
 else:
-    print(f"Error: {final_response.status_code}, {final_response.text}")
+    print(colored(f"Error: {final_response.status_code}, {final_response.text}", "red"))
