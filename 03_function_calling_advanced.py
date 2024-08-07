@@ -51,6 +51,7 @@ payload = {
 # Print the initial request payload
 print(colored("Initial Request Payload:", "cyan"))
 print(colored(json.dumps(payload, indent=2), "yellow"))
+input(colored("Press Enter to send the initial request to the AI model...", "cyan"))
 
 response = requests.post(api_url, headers=headers, data=json.dumps(payload))
 
@@ -60,6 +61,7 @@ if response.status_code == 200:
     # Print the initial response
     print(colored("Initial Response:", "cyan"))
     print(colored(json.dumps(response_data, indent=2), "green"))
+    input(colored("Press Enter to proceed with tool calls processing...", "cyan"))
     
     tool_calls = response_data.get('choices', [{}])[0].get('message', {}).get('tool_calls', [])
 
@@ -90,7 +92,9 @@ if response.status_code == 200:
 
 else:
     print(colored(f"Error: {response.status_code}, {response.text}", "red"))
-
+    input(colored("Press Enter to exit due to error...", "red"))
+    exit()
+input(colored("Tool call finished, press enter to generate final request payload...", "cyan"))
 # Extend messages with tool responses only if there were successful tool calls
 if tool_messages:
     messages.extend(tool_messages)
@@ -105,6 +109,7 @@ payload = {
 # Print the final request payload
 print(colored("Final Request Payload:", "cyan"))
 print(colored(json.dumps(payload, indent=2), "yellow"))
+input(colored("Press Enter to send the final request to the AI model...", "cyan"))
 
 # Make the final request to the OpenAI API
 final_response = requests.post(api_url, headers=headers, data=json.dumps(payload))
@@ -118,3 +123,4 @@ if final_response.status_code == 200:
     print(colored(final_content, "green"))
 else:
     print(colored(f"Error: {final_response.status_code}, {final_response.text}", "red"))
+    input(colored("Press Enter to exit due to error...", "red"))
