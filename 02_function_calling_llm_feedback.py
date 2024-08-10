@@ -31,7 +31,8 @@ messages = [
 payload = {
     "model": model,
     "messages": messages,
-    "tools": tools
+    "tools": tools,
+    "keep_alive": "-1"
 }
 
 response = requests.post(api_url, headers=headers, data=json.dumps(payload))

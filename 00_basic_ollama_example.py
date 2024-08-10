@@ -31,7 +31,8 @@ payload = {
         {"role": "system", "content": "You are a smart AI assistant. You are a master at understanding what a customer wants and utilize available tools only if you have to."},
         {"role": "user", "content": "What is the weather in Woodbury MN?"}
     ],
-    "tools": tools
+    "tools": tools,
+    "keep_alive": "-1"
 }
 # Define the OpenAI endpoint and API key
 api_url = "http://ai.mtcl.lan:11434/v1/chat/completions"

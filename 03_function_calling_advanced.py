@@ -45,7 +45,8 @@ messages = [
 payload = {
     "model": model,
     "messages": messages,
-    "tools": tools
+    "tools": tools,
+    "keep_alive": "-1"
 }
 
 # Print the initial request payload
@@ -103,7 +104,8 @@ if tool_messages:
 payload = {
     "model": model,
     "messages": messages,
-    "tools": tools
+    "tools": tools,
+    "keep_alive": "-1"
 }
 
 # Print the final request payload

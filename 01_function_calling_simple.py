@@ -18,7 +18,8 @@ payload = {
             "content": "How hot is it in minneapolis??"
         }
     ],
-    "tools": tools
+    "tools": tools,
+    "keep_alive": "-1"
 }
 # Define the OpenAI endpoint and API key
 api_url = "http://ai.mtcl.lan:11434/v1/chat/completions"
